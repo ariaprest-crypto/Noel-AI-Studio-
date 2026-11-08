@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11111b">
+<title>NOEL AI STUDIO</title>
+<style>
+:root{--bg:#0d0d15;--panel:#171722;--panel2:#202031;--text:#f4f2fa;--muted:#aaa7bb;--accent:#b79cff;--line:#343247}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#29203d 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:22px 16px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
+.brand{font-size:21px;font-weight:800;letter-spacing:.08em}.badge{font-size:11px;color:#d7caff;border:1px solid #68578f;padding:5px 9px;border-radius:20px}
+h1{font-size:clamp(26px,5vw,40px);line-height:1.12;margin:12px 0}.intro{color:var(--muted);max-width:700px;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.card h2{font-size:16px;margin:0 0 12px}.full{grid-column:1/-1}
+label{display:block;font-size:13px;color:#d5d1e3;margin:10px 0 6px}
+input,select,textarea{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit}
+textarea{min-height:86px;resize:vertical}input[type=file]{padding:9px;font-size:12px}
+.preview{display:flex;gap:9px;flex-wrap:wrap;margin-top:9px}.preview img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+button{border:0;border-radius:11px;padding:12px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.primary{background:var(--accent);color:#171020}.secondary{background:#302b40;color:#f2edff;border:1px solid #504663}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.output{min-height:180px;background:#101019;border:1px solid var(--line);border-radius:12px;padding:14px;white-space:pre-wrap;color:#e9e4f5}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.footer{color:var(--muted);font-size:12px;text-align:center;margin-top:24px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.top{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">✦ NOEL AI STUDIO</div><div class="badge">PROMPT BUILDER • BETA</div></div>
+  <h1>Bangun prompt foto dengan lebih terarah.</h1>
+  <p class="intro">Susun konsep karakter, outfit, pose, dan suasana foto dalam satu tempat. Versi awal ini membuat prompt siap salin; belum menghasilkan gambar secara langsung.</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>01 · Referensi karakter</h2>
+      <label for="face">Foto wajah / karakter (opsional)</label>
+      <input id="face" type="file" accept="image/*">
+      <div class="preview" id="facePreview"></div>
+      <label for="identity">Catatan identitas karakter</label>
+      <textarea id="identity" placeholder="Contoh: karakter fiktif perempuan dewasa, rambut hitam sebahu, wajah oval..."></textarea>
+    </section>
+
+    <section class="card">
+      <h2>02 · Referensi outfit</h2>
+      <label for="outfit">Foto outfit (opsional)</label>
+      <input id="outfit" type="file" accept="image/*">
+      <div class="preview" id="outfitPreview"></div>
+      <label for="clothes">Deskripsi outfit</label>
+      <textarea id="clothes" placeholder="Contoh: gaun malam elegan, atau fashion editorial dewasa yang sensual namun tetap tertutup..."></textarea>
+    </section>
+
+    <section class="card">
+      <h2>03 · Pose & komposisi</h2>
+      <label for="pose">Foto pose (opsional)</label>
+      <input id="pose" type="file" accept="image/*">
+      <div class="preview" id="posePreview"></div>
+      <label for="poseText">Deskripsi pose</label>
+      <textarea id="poseText" placeholder="Contoh: berdiri tegak, satu tangan di pinggang, menatap kamera..."></textarea>
+    </section>
+
+    <section class="card">
+      <h2>04 · Gaya fotografi</h2>
+      <label for="style">Gaya</label>
+      <select id="style">
+        <option>Ultra-photorealistic fashion editorial</option>
+        <option>Luxury studio photography</option>
+        <option>Natural lifestyle photography</option>
+        <option>Cinematic portrait photography</option>
+        <option>High-end magazine cover photography</option>
+      </select>
+      <label for="lighting">Pencahayaan</label>
+      <select id="lighting">
+        <option>Soft professional studio lighting</option>
+        <option>Golden hour natural lighting</option>
+        <option>Moody cinematic lighting</option>
+        <option>Bright clean editorial lighting</option>
+        <option>Soft window light</option>
+      </select>
+      <label for="background">Latar belakang</label>
+      <input id="background" placeholder="Contoh: studio minimalis bernuansa hangat">
+    </section>
+
+    <section class="card full">
+      <h2>05 · Hasil prompt</h2>
+      <div class="output" id="result">Prompt kamu akan muncul di sini setelah menekan “Buat prompt”.</div>
+      <div class="actions">
+        <button class="primary" id="make">Buat prompt</button>
+        <button class="secondary" id="copy">Salin prompt</button>
+        <button class="secondary" id="clear">Reset</button>
+      </div>
+      <p class="note">Foto yang dipilih hanya ditampilkan sebagai pratinjau di browser ini; belum diunggah ke server atau dikirim ke layanan AI. Gunakan foto karakter fiktif dewasa atau foto orang dewasa yang penggunaannya telah mendapat persetujuan. Aplikasi ini tidak ditujukan untuk membuat konten intim tanpa persetujuan.</p>
+    </section>
+  </div>
+  <div class="footer">NOEL AI STUDIO · Versi awal · Prompt builder lokal di browser</div>
+</div>
+<script>
+const ids=[["face","facePreview"],["outfit","outfitPreview"],["pose","posePreview"]];
+ids.forEach(([inputId,previewId])=>{
+ const input=document.getElementById(inputId), box=document.getElementById(previewId);
+ input.addEventListener("change",()=>{
+   box.innerHTML="";
+   [...input.files].slice(0,3).forEach(file=>{
+     if(!file.type.startsWith("image/"))return;
+     const img=document.createElement("img"); img.alt="Pratinjau referensi";
+     const url=URL.createObjectURL(file); img.src=url; box.appendChild(img);
+   });
+ });
+});
+function val(id){return document.getElementById(id).value.trim()}
+document.getElementById("make").addEventListener("click",()=>{
+ const identity=val("identity")||"an adult fictional character; preserve the same recognizable facial identity when a valid reference image is supplied";
+ const clothes=val("clothes")||"elegant, fully clothed adult fashion styling";
+ const pose=val("poseText")||"a natural, confident editorial pose";
+ const bg=val("background")||"a clean professional photography setting";
+ const prompt=`${val("style")}, featuring ${identity}. Outfit: ${clothes}. Pose and composition: ${pose}. Background: ${bg}. Lighting: ${val("lighting")}. Maintain realistic anatomy, natural skin texture, coherent hands and fingers, accurate fabric details, professional color grading, sharp facial focus, high photographic detail. Keep the character clearly adult. Use the uploaded images only as references for the corresponding attributes; do not combine identities from different people.`;
+ document.getElementById("result").textContent=prompt;
+});
+document.getElementById("copy").addEventListener("click",async()=>{
+ const text=document.getElementById("result").textContent;
+ if(!text||text.startsWith("Prompt kamu")){alert("Buat prompt terlebih dahulu.");return;}
+ try{await navigator.clipboard.writeText(text);alert("Prompt berhasil disalin.");}
+ catch(e){const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();alert("Prompt berhasil disalin.");}
+});
+document.getElementById("clear").addEventListener("click",()=>{
+ document.querySelectorAll("input,textarea").forEach(el=>el.value="");
+ document.querySelectorAll(".preview").forEach(el=>el.innerHTML="");
+ document.getElementById("result").textContent="Prompt kamu akan muncul di sini setelah menekan “Buat prompt”.";
+});
+</script>
+</body>
+</html>
